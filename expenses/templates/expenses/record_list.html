@@ -1,0 +1,24 @@
+{% extends 'expenses/base.html' %}
+
+{% block content %}
+<div class="record">
+    <table border="2">
+        <tr>
+            <th>日付</th>
+            <th>金額</th>
+            <th>カテゴリ</th>
+            <th>支払い方法</th>
+            <th>用途</th>
+        </tr>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.expense_date }}</td>
+            <td><a href="{% url 'record_edit' pk=record.pk %}">{{ record.amount }}</a></td>
+            <td>{{ record.category }}</td>
+            <td>{{ record.payment }}</td>
+            <td>{{ record.note }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
