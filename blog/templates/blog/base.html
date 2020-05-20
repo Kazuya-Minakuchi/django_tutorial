@@ -16,10 +16,23 @@
             {% else %}
                 <a href="{% url 'login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
             {% endif %}
-            <h1><a href="/">Django Girls Blog</a></h1>
+            <h1><a href="/">Django Tutorial</a></h1>
         </div>
 
         <div class="content container">
+            {% if user.is_authenticated %}
+            <p>
+                <a href="{% url 'post_new' %}">
+                    <button type="button">新規投稿</button>
+                </a>
+            </p>
+            <p>
+                <a href="{% url 'category_new' %}">
+                    <button type="button">新規カテゴリ</button>
+                </a>
+                <a href="{% url 'category_list' %}">カテゴリ一覧</a>
+            </p>
+            {% endif %}
             <div class="row">
                 <div class="col-md-8">
                 {% block content %}

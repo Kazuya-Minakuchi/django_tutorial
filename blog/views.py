@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
-from .models import Post, Comment
-from .forms import PostForm, CommentForm
+from .models import Post, Comment, Category
+from .forms import PostForm, CommentForm, CategoryForm
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 
@@ -81,3 +81,33 @@ def comment_remove(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
     return redirect('post_detail', pk=comment.post.pk)
+
+@login_required
+def category_list(request):
+    categories = Category.objects.all
+    return render(request, 'blog/category_list.html', {'categories': categories})
+
+@login_required
+def category_new(request):
+    if request.method == "POST":
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('category_list')
+    else:
+        form = CategoryForm()
+    return render(request, 'blog/category_edit.html', {'form': form})
+
+@login_required
+def category_edit(request, pk):
+    post = get_object_or_404(Category, pk=pk)
+    if request.method == "POST":
+        form = CategoryForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('category_list')
+    else:
+        form = CategoryForm(instance=post)
+    return render(request, 'blog/category_edit.html', {'form': form})
