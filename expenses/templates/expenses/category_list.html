@@ -1,0 +1,17 @@
+{% extends 'expenses/base.html' %}
+
+{% block content %}
+<h2>Category List</h2>
+    <table border="1">
+        <tr>
+            <th>pk</th>
+            <th>name</th>
+        </tr>
+        {% for category in categories %}
+        <tr>
+            <td>{{ category.pk }}</td>
+            <td><a href="{% url 'expenses:category_edit' pk=category.pk %}">{{ category.name }}</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

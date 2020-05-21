@@ -35,3 +35,63 @@ def record_new(request):
     else:
         form = RecordForm()
     return render(request, 'expenses/record_edit.html', {'form': form})
+
+@login_required
+def category_list(request):
+    categories = Category.objects.all
+    return render(request, 'expenses/category_list.html', {'categories': categories})
+
+@login_required
+def category_new(request):
+    if request.method == "POST":
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('expenses:category_list')
+    else:
+        form = CategoryForm()
+    return render(request, 'expenses/category_edit.html', {'form': form})
+
+@login_required
+def category_edit(request, pk):
+    post = get_object_or_404(Category, pk=pk)
+    if request.method == "POST":
+        form = CategoryForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('expenses:category_list')
+    else:
+        form = CategoryForm(instance=post)
+    return render(request, 'expenses/category_edit.html', {'form': form})
+
+@login_required
+def payment_list(request):
+    payments = Payment.objects.all
+    return render(request, 'expenses/payment_list.html', {'payments': payments})
+
+@login_required
+def payment_new(request):
+    if request.method == "POST":
+        form = PaymentForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('expenses:payment_list')
+    else:
+        form = PaymentForm()
+    return render(request, 'expenses/payment_edit.html', {'form': form})
+
+@login_required
+def payment_edit(request, pk):
+    post = get_object_or_404(Payment, pk=pk)
+    if request.method == "POST":
+        form = PaymentForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('expenses:payment_list')
+    else:
+        form = PaymentForm(instance=post)
+    return render(request, 'expenses/payment_edit.html', {'form': form})

@@ -25,7 +25,7 @@ def post_new(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            return redirect('post_detail', pk=post.pk)
+            return redirect('blog:post_detail', pk=post.pk)
     else:
         form = PostForm()
     return render(request, 'blog/post_edit.html', {'form': form})
@@ -39,7 +39,7 @@ def post_edit(request, pk):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            return redirect('post_detail', pk=post.pk)
+            return redirect('blog:post_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.html', {'form': form})
@@ -53,13 +53,13 @@ def post_draft_list(request):
 def post_publish(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.publish()
-    return redirect('post_detail', pk=pk)
+    return redirect('blog:post_detail', pk=pk)
 
 @login_required
 def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()
-    return redirect('post_list')
+    return redirect('blog:post_list')
 
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -69,7 +69,7 @@ def add_comment_to_post(request, pk):
             comment = form.save(commit=False)
             comment.post = post
             comment.save()
-            return redirect('post_detail', pk=post.pk)
+            return redirect('blog:post_detail', pk=post.pk)
     else:
         form = CommentForm()
     return render(request, 'blog/add_comment_to_post.html', {'form': form})
@@ -78,13 +78,13 @@ def add_comment_to_post(request, pk):
 def comment_approve(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.approve()
-    return redirect('post_detail', pk=comment.post.pk)
+    return redirect('blog:post_detail', pk=comment.post.pk)
 
 @login_required
 def comment_remove(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
-    return redirect('post_detail', pk=comment.post.pk)
+    return redirect('blog:post_detail', pk=comment.post.pk)
 
 @login_required
 def category_list(request):
@@ -98,7 +98,7 @@ def category_new(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
-            return redirect('category_list')
+            return redirect('blog:category_list')
     else:
         form = CategoryForm()
     return render(request, 'blog/category_edit.html', {'form': form})
@@ -111,7 +111,7 @@ def category_edit(request, pk):
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
-            return redirect('category_list')
+            return redirect('blog:category_list')
     else:
         form = CategoryForm(instance=post)
     return render(request, 'blog/category_edit.html', {'form': form})
@@ -123,7 +123,7 @@ class PostImport(generic.FormView):
 
     def form_valid(self, form):
         form.save()
-        return redirect('post_list')
+        return redirect('blog:post_list')
 
 def post_export(request):
     response = HttpResponse(content_type='text/csv')

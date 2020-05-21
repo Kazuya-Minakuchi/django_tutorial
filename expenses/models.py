@@ -4,7 +4,6 @@ from django.utils import timezone
 
 
 class Record(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_date = models.DateTimeField(default=timezone.now)
     expense_date = models.DateField(blank=True, null=True)
     amount = models.IntegerField()
@@ -20,6 +19,6 @@ class Category(models.Model):
 
 class Payment(models.Model):
     name = models.CharField(max_length=200)
-
+    
     def __str__(self):
         return self.name

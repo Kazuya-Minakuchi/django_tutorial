@@ -13,7 +13,7 @@
         {% for record in records %}
         <tr>
             <td>{{ record.expense_date }}</td>
-            <td><a href="{% url 'record_edit' pk=record.pk %}">{{ record.amount }}</a></td>
+            <td><a href="{% url 'expenses:record_edit' pk=record.pk %}">{{ record.amount }}</a></td>
             <td>{{ record.category }}</td>
             <td>{{ record.payment }}</td>
             <td>{{ record.note }}</td>
