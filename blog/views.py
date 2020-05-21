@@ -133,7 +133,7 @@ def post_export(request):
     for post in Post.objects.filter(published_date__lte=timezone.now()):
         writer.writerow(
             [post.pk,
-            #  post.author,
+             post.author,
              post.title,
              post.text,
              post.created_date.strftime('%Y-%m-%d %H:%M:%S %z'),
