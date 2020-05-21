@@ -21,14 +21,11 @@
 
         <div class="content container">
             {% if user.is_authenticated %}
-            <ul>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'import' %}">Import</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'export' %}">Export</a>
-                </li>
-            </ul>
+            <div class="nav-list">
+                CSVインポート・エクスポート
+                <a class="nav-link" href="{% url 'import' %}">Import</a>
+                <a class="nav-link" href="{% url 'export' %}">Export</a>
+            </div>
             <p>
                 <a href="{% url 'post_new' %}">
                     <button type="button">新規投稿</button>
