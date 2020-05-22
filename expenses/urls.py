@@ -12,4 +12,6 @@ urlpatterns = [
     path('payment/list/', views.payment_list, name='payment_list'),
     path('payment/new/', views.payment_new, name='payment_new'),
     path('payment/<int:pk>/edit/', views.payment_edit, name='payment_edit'),
+    path('import/', views.PostImport.as_view(), name='import'),
+    path('export/', views.post_export, name='export'),
 ]

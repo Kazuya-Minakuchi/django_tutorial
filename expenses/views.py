@@ -1,9 +1,13 @@
-from django.shortcuts import render, get_object_or_404
-from django.utils import timezone
-from .models import Record, Category, Payment
-from .forms import RecordForm, CategoryForm, PaymentForm
-from django.shortcuts import redirect
+import csv
+import datetime
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.utils import timezone
+from django.views import generic
+from .models import Record, Category, Payment
+from .forms import RecordForm, CategoryForm, PaymentForm, CSVUploadForm
 
 def record_list(request):
     records = Record.objects.order_by('-expense_date')
@@ -95,3 +99,31 @@ def payment_edit(request, pk):
     else:
         form = PaymentForm(instance=post)
     return render(request, 'expenses/payment_edit.html', {'form': form})
+
+class PostImport(generic.FormView):
+    template_name = 'expenses/import.html'
+    success_url = reverse_lazy('expenses:record_list')
+    form_class = CSVUploadForm
+
+    def form_valid(self, form):
+        form.save()
+        return redirect('expenses:record_list')
+
+def post_export(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="records.csv"'
+    # HttpResponseオブジェクトはファイルっぽいオブジェクトなので、csv.writerにそのまま渡せる
+    writer = csv.writer(response)
+    records = Record.objects.all()
+    for record in records:
+        writer.writerow(
+            [record.pk,
+             record.created_date.strftime('%Y-%m-%d %H:%M:%S %z'),
+             record.expense_date.strftime('%Y-%m-%d'),
+             record.amount,
+             record.category,
+             record.payment,
+             record.note
+             ]
+        )
+    return response

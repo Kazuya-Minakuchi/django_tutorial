@@ -20,6 +20,14 @@
 
         <div class="content container">
             {% if user.is_authenticated %}
+            <ul>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'expenses:import' %}">Import</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'expenses:export' %}">Export</a>
+                </li>
+            </ul>            
             <p>
                 <a href="{% url 'expenses:record_new' %}">
                     <button type="button">レコード追加</button>
