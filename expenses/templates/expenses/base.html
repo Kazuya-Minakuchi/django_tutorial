@@ -2,22 +2,18 @@
 <html>
     <head>
         <title>Expenses</title>
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-        <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="{% static 'css/expenses.css' %}">
     </head>
     <body>
         <div class="page-header">
             {% if user.is_authenticated %}
-                <a href="{% url 'expenses:record_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
                 <p class="top-menu">Hello {{ user.username }} <small>(<a href="{% url 'logout' %}">Log out</a>)</small></p>
             {% else %}
-                <a href="{% url 'login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
+                <a href="{% url 'login' %}">Log in</a>
             {% endif %}
-            <h1><a href="/expenses">Expenses</a></h1>
+            <h1><a href="{% url 'expenses:record_list' %}">Expenses</a></h1>
         </div>
-
+        
         <div class="content container">
             {% if user.is_authenticated %}
             <ul>
