@@ -127,3 +127,8 @@ def post_export(request):
              ]
         )
     return response
+
+def record_remove(request, pk):
+    record = get_object_or_404(Record, pk=pk)
+    record.delete()
+    return redirect('expenses:record_list')

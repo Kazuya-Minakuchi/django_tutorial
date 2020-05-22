@@ -17,5 +17,5 @@ urlpatterns = [
     path('category/<int:pk>/edit/', views.category_edit, name='category_edit'),
     path('category/list/', views.category_list, name='category_list'),
     path('import/', views.PostImport.as_view(), name='import'),
-    path('export/', views.post_export, name='export'),    
+    path('export/', views.post_export, name='export'),
 ]
