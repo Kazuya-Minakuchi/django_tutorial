@@ -100,7 +100,7 @@ def payment_edit(request, pk):
         form = PaymentForm(instance=post)
     return render(request, 'expenses/payment_edit.html', {'form': form})
 
-class PostImport(generic.FormView):
+class RecordImport(generic.FormView):
     template_name = 'expenses/import.html'
     success_url = reverse_lazy('expenses:record_list')
     form_class = CSVUploadForm
@@ -109,7 +109,7 @@ class PostImport(generic.FormView):
         form.save()
         return redirect('expenses:record_list')
 
-def post_export(request):
+def record_export(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="records.csv"'
     # HttpResponseオブジェクトはファイルっぽいオブジェクトなので、csv.writerにそのまま渡せる
