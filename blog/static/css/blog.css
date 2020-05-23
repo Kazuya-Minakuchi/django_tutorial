@@ -1,7 +1,7 @@
 .page-header {
-    background-color: #0f046e;
+    background-color: #6e3404;
     margin-top: 0;
-    padding: 20px 20px20px 40px;
+    padding: 20px 20px 20px 40px;
 }
 
 .page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
@@ -48,8 +48,4 @@ h1, h2, h3, h4 {
 
 .comment {
     margin: 20px 0px 20px 20px;
-}
-
-.nav-list {
-    float:left;
 }

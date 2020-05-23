@@ -10,7 +10,7 @@ from .models import Record, Category, Payment
 from .forms import RecordForm, CategoryForm, PaymentForm, CSVUploadForm
 
 def record_list(request):
-    records = Record.objects.order_by('-expense_date')
+    records = Record.objects.order_by('-expense_date', '-created_date')
     return render(request, 'expenses/record_list.html', {'records': records})
 
 @login_required
@@ -22,7 +22,7 @@ def record_edit(request, pk):
             record = form.save(commit=False)
             record.author = request.user
             record.save()
-            return redirect('record_list')
+            return redirect('expenses:record_list')
     else:
         form = RecordForm(instance=record)
     return render(request, 'expenses/record_edit.html', {'form': form})
@@ -35,14 +35,14 @@ def record_new(request):
             record = form.save(commit=False)
             record.author = request.user
             record.save()
-            return redirect('record_list')
+            return redirect('expenses:record_list')
     else:
         form = RecordForm()
     return render(request, 'expenses/record_edit.html', {'form': form})
 
 @login_required
 def category_list(request):
-    categories = Category.objects.all
+    categories = Category.objects.all()
     return render(request, 'expenses/category_list.html', {'categories': categories})
 
 @login_required
@@ -72,7 +72,7 @@ def category_edit(request, pk):
 
 @login_required
 def payment_list(request):
-    payments = Payment.objects.all
+    payments = Payment.objects.all()
     return render(request, 'expenses/payment_list.html', {'payments': payments})
 
 @login_required

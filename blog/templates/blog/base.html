@@ -1,7 +1,7 @@
 {% load static %}
 <html>
     <head>
-        <title>Django Girls blog</title>
+        <title>Django Tutorial</title>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
@@ -21,22 +21,30 @@
 
         <div class="content container">
             {% if user.is_authenticated %}
-            <div class="nav-list">
-                CSVインポート・エクスポート
-                <a class="nav-link" href="{% url 'blog:import' %}">Import</a>
-                <a class="nav-link" href="{% url 'blog:export' %}">Export</a>
+            <ul>
+                <li>
+                    CSVインポート・エクスポート
+                </li>
+                <li>
+                    <a class="nav-link" href="{% url 'blog:import' %}">Import</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="{% url 'blog:export' %}">Export</a>
+                </li>
+            </ul>
+            <div>
+                <p>
+                    <a href="{% url 'blog:post_new' %}">
+                        <button type="button">新規投稿</button>
+                    </a>
+                </p>
+                <p>
+                    <a href="{% url 'blog:category_new' %}">
+                        <button type="button">新規カテゴリ</button>
+                    </a>
+                    <a href="{% url 'blog:category_list' %}">カテゴリ一覧</a>
+                </p>
             </div>
-            <p>
-                <a href="{% url 'blog:post_new' %}">
-                    <button type="button">新規投稿</button>
-                </a>
-            </p>
-            <p>
-                <a href="{% url 'blog:category_new' %}">
-                    <button type="button">新規カテゴリ</button>
-                </a>
-                <a href="{% url 'blog:category_list' %}">カテゴリ一覧</a>
-            </p>
             {% endif %}
             <div class="row">
                 <div class="col-md-8">
