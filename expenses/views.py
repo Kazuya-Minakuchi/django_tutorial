@@ -9,10 +9,38 @@ from django.views import generic
 from .models import Record, Category, Payment
 from .forms import RecordForm, CategoryForm, PaymentForm, CSVUploadForm
 
+# レコード一覧
 def record_list(request):
     records = Record.objects.order_by('-expense_date', '-created_date')
     return render(request, 'expenses/record_list.html', {'records': records})
 
+# カテゴリ一覧
+@login_required
+def category_list(request):
+    categories = Category.objects.all()
+    return render(request, 'expenses/category_list.html', {'categories': categories})
+
+# 支払い方法一覧
+@login_required
+def payment_list(request):
+    payments = Payment.objects.all()
+    return render(request, 'expenses/payment_list.html', {'payments': payments})
+
+# レコード追加
+@login_required
+def record_new(request):
+    if request.method == "POST":
+        form = RecordForm(request.POST)
+        if form.is_valid():
+            record = form.save(commit=False)
+            record.author = request.user
+            record.save()
+            return redirect('expenses:record_list')
+    else:
+        form = RecordForm()
+    return render(request, 'expenses/record_edit.html', {'form': form})
+
+# レコード編集
 @login_required
 def record_edit(request, pk):
     record = get_object_or_404(Record, pk=pk)
@@ -27,24 +55,7 @@ def record_edit(request, pk):
         form = RecordForm(instance=record)
     return render(request, 'expenses/record_edit.html', {'form': form})
 
-@login_required
-def record_new(request):
-    if request.method == "POST":
-        form = RecordForm(request.POST)
-        if form.is_valid():
-            record = form.save(commit=False)
-            record.author = request.user
-            record.save()
-            return redirect('expenses:record_list')
-    else:
-        form = RecordForm()
-    return render(request, 'expenses/record_edit.html', {'form': form})
-
-@login_required
-def category_list(request):
-    categories = Category.objects.all()
-    return render(request, 'expenses/category_list.html', {'categories': categories})
-
+# カテゴリ追加
 @login_required
 def category_new(request):
     if request.method == "POST":
@@ -57,6 +68,7 @@ def category_new(request):
         form = CategoryForm()
     return render(request, 'expenses/category_edit.html', {'form': form})
 
+# カテゴリ編集
 @login_required
 def category_edit(request, pk):
     post = get_object_or_404(Category, pk=pk)
@@ -70,11 +82,7 @@ def category_edit(request, pk):
         form = CategoryForm(instance=post)
     return render(request, 'expenses/category_edit.html', {'form': form})
 
-@login_required
-def payment_list(request):
-    payments = Payment.objects.all()
-    return render(request, 'expenses/payment_list.html', {'payments': payments})
-
+# 支払い方法追加
 @login_required
 def payment_new(request):
     if request.method == "POST":
@@ -87,6 +95,7 @@ def payment_new(request):
         form = PaymentForm()
     return render(request, 'expenses/payment_edit.html', {'form': form})
 
+# 支払い方法編集
 @login_required
 def payment_edit(request, pk):
     post = get_object_or_404(Payment, pk=pk)
@@ -100,6 +109,25 @@ def payment_edit(request, pk):
         form = PaymentForm(instance=post)
     return render(request, 'expenses/payment_edit.html', {'form': form})
 
+# レコード削除
+def record_remove(request, pk):
+    record = get_object_or_404(Record, pk=pk)
+    record.delete()
+    return redirect('expenses:record_list')
+
+# カテゴリ削除
+def category_remove(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    category.delete()
+    return redirect('expenses:category_list')
+
+# 支払い方法削除
+def payment_remove(request, pk):
+    payment = get_object_or_404(Payment, pk=pk)
+    payment.delete()
+    return redirect('expenses:payment_list')
+
+# カテゴリCSVインポート
 class RecordImport(generic.FormView):
     template_name = 'expenses/record_import.html'
     success_url = reverse_lazy('expenses:record_list')
@@ -109,6 +137,7 @@ class RecordImport(generic.FormView):
         form.save()
         return redirect('expenses:record_list')
 
+# カテゴリCSVエクスポート
 def record_export(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="records.csv"'
@@ -128,17 +157,3 @@ def record_export(request):
         )
     return response
 
-def record_remove(request, pk):
-    record = get_object_or_404(Record, pk=pk)
-    record.delete()
-    return redirect('expenses:record_list')
-
-def payment_remove(request, pk):
-    payment = get_object_or_404(Payment, pk=pk)
-    payment.delete()
-    return redirect('expenses:payment_list')
-
-def category_remove(request, pk):
-    category = get_object_or_404(Category, pk=pk)
-    category.delete()
-    return redirect('expenses:category_list')
