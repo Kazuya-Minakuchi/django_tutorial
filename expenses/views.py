@@ -13,10 +13,12 @@ from .forms import RecordForm, CategoryForm, PaymentForm, CSVUploadForm
 # レコード一覧
 def record_list(request):
     records = Record.objects.order_by('-expense_date', '-created_date')
-    page_obj = paginate_queryset(request, records, 25)
+    page_obj = paginate_queryset(request, records, 10)
     context = {
         'records': page_obj.object_list,
         'page_obj': page_obj,
+        'start_page': page_obj.number - 4,
+        'end_page': page_obj.number + 4,
     }
     return render(request, 'expenses/record_list.html', context)
 
