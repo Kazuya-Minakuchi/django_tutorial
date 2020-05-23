@@ -1,17 +1,23 @@
 {% extends 'expenses/base.html' %}
 
 {% block content %}
-    <h2>Payment List</h2>
-    <table border="1">
-        <tr>
-            <th>pk</th>
-            <th>name</th>
-        </tr>
-        {% for payment in payments %}
-        <tr>
-            <td>{{ payment.pk }}</td>
-            <td><a href="{% url 'expenses:payment_edit' pk=payment.pk %}">{{ payment.name }}</a></td>
-        </tr>
-        {% endfor %}
-    </table>
+<h2>Payment List</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-bordered">
+		<thead>
+			<tr>
+				<th>pk</th>
+				<th>name</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for payment in payments %}
+			<tr>
+				<td>{{ payment.pk }}</td>
+				<td><a href="{% url 'expenses:payment_edit' pk=payment.pk %}">{{ payment.name }}</a></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+  </table>
+</div>
 {% endblock %}

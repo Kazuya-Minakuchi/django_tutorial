@@ -2,16 +2,22 @@
 
 {% block content %}
 <h2>Category List</h2>
-    <table border="1">
-        <tr>
-            <th>pk</th>
-            <th>name</th>
-        </tr>
-        {% for category in categories %}
-        <tr>
-            <td>{{ category.pk }}</td>
-            <td><a href="{% url 'expenses:category_edit' pk=category.pk %}">{{ category.name }}</a></td>
-        </tr>
-        {% endfor %}
-    </table>
+<div class="table-responsive">
+  <table class="table table-striped table-bordered">
+		<thead>
+			<tr>
+				<th>pk</th>
+				<th>name</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for category in categories %}
+			<tr>
+				<td>{{ category.pk }}</td>
+				<td><a href="{% url 'expenses:category_edit' pk=category.pk %}">{{ category.name }}</a></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+  </table>
+</div>
 {% endblock %}
