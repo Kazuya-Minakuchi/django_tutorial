@@ -8,6 +8,7 @@
 			<tr>
 				<th>pk</th>
 				<th>name</th>
+				<th>削除</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -15,6 +16,7 @@
 			<tr>
 				<td>{{ payment.pk }}</td>
 				<td><a href="{% url 'expenses:payment_edit' pk=payment.pk %}">{{ payment.name }}</a></td>
+				<td><a class="btn btn-secondary" href="{% url 'expenses:payment_remove' pk=payment.pk %}">削除</a></td>
 			</tr>
 			{% endfor %}
 		</tbody>

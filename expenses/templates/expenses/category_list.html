@@ -8,6 +8,7 @@
 			<tr>
 				<th>pk</th>
 				<th>name</th>
+				<th>削除</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -15,6 +16,7 @@
 			<tr>
 				<td>{{ category.pk }}</td>
 				<td><a href="{% url 'expenses:category_edit' pk=category.pk %}">{{ category.name }}</a></td>
+				<td><a class="btn btn-secondary" href="{% url 'expenses:category_remove' pk=category.pk %}">削除</a></td>
 			</tr>
 			{% endfor %}
 		</tbody>

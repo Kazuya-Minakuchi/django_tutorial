@@ -11,7 +11,7 @@
 				<th>カテゴリ</th>
 				<th>支払い方法</th>
 				<th>用途</th>
-				<!-- <th>削除</th> -->
+				<th>削除</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -22,7 +22,7 @@
 				<td>{{ record.category }}</td>
 				<td>{{ record.payment }}</td>
 				<td>{{ record.note }}</td>
-				<!-- <td><a class="btn btn-default" href="{% url 'expenses:record_remove' pk=record.pk %}"><span class="glyphicon glyphicon-remove"></span></a></td> -->
+				<td><a class="btn btn-secondary" href="{% url 'expenses:record_remove' pk=record.pk %}">削除</a></td>
 			</tr>
 			{% endfor %}
 		</tbody>

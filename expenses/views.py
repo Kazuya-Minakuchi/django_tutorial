@@ -132,3 +132,13 @@ def record_remove(request, pk):
     record = get_object_or_404(Record, pk=pk)
     record.delete()
     return redirect('expenses:record_list')
+
+def payment_remove(request, pk):
+    payment = get_object_or_404(Payment, pk=pk)
+    payment.delete()
+    return redirect('expenses:payment_list')
+
+def category_remove(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    category.delete()
+    return redirect('expenses:category_list')
