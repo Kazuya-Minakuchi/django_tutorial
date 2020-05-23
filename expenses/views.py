@@ -1,6 +1,7 @@
 import csv
 import datetime
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -12,7 +13,23 @@ from .forms import RecordForm, CategoryForm, PaymentForm, CSVUploadForm
 # レコード一覧
 def record_list(request):
     records = Record.objects.order_by('-expense_date', '-created_date')
-    return render(request, 'expenses/record_list.html', {'records': records})
+    page_obj = paginate_queryset(request, records, 25)
+    context = {
+        'records': page_obj.object_list,
+        'page_obj': page_obj,
+    }
+    return render(request, 'expenses/record_list.html', context)
+
+def paginate_queryset(request, queryset, count):
+    paginator = Paginator(queryset, count)
+    page = request.GET.get('page')
+    try:
+        page_obj = paginator.page(page)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+    return page_obj
 
 # カテゴリ一覧
 @login_required
