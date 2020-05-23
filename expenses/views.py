@@ -101,7 +101,7 @@ def payment_edit(request, pk):
     return render(request, 'expenses/payment_edit.html', {'form': form})
 
 class RecordImport(generic.FormView):
-    template_name = 'expenses/import.html'
+    template_name = 'expenses/record_import.html'
     success_url = reverse_lazy('expenses:record_list')
     form_class = CSVUploadForm
 
