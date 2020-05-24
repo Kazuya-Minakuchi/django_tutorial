@@ -74,6 +74,28 @@ def record_edit(request, pk):
         form = RecordForm(instance=record)
     return render(request, 'expenses/record_edit.html', {'form': form})
 
+# レコードコピー
+@login_required
+def record_copy(request, pk):
+    if request.method == "POST":
+        form = RecordForm(request.POST)
+        if form.is_valid():
+            record = form.save(commit=False)
+            record.author = request.user
+            record.save()
+            return redirect('expenses:record_list')
+    else:
+        copied_record = get_object_or_404(Record, pk=pk)
+        copied_data = {
+            'expense_date': copied_record.expense_date,
+            'amount': copied_record.amount,
+            'category': copied_record.category,
+            'payment': copied_record.payment,
+            'note': copied_record.note,
+        }
+        form = RecordForm(None, initial=copied_data)
+    return render(request, 'expenses/record_edit.html', {'form': form})
+
 # カテゴリ追加
 @login_required
 def category_new(request):
