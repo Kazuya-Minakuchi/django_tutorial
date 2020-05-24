@@ -1,50 +1,82 @@
 {% extends 'expenses/base.html' %}
-
 {% block content %}
+
 <h2>Record Aggregate</h2>
+<h3>月毎</h3>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered">
+		<thead>
+			<tr>
+        <th>月</th>
+				<th>金額</th>
+			</tr>
+		</thead>
+		<tbody>
+      {% for amount in amounts_per_m %}
+			<tr>
+        <td>{{ amount.month }}</td>
+        <td style="text-align: right;">{{ amount.amount }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
 <h3>月・カテゴリ毎</h3>
 <div class="table-responsive">
 	<table class="table table-striped table-bordered">
 		<thead>
 			<tr>
-				<th>月</th>
-				<th>カテゴリ</th>
-				<th>金額</th>
+        <th>月</th>
+        {% for category in categories %}
+				<th>{{ category.name }}</th>
+        {% endfor %}
 			</tr>
 		</thead>
 		<tbody>
-			{% for amount in amounts_per_m_c %}
+      {% for amount in amounts_per_m_c %}
 			<tr>
-				<td>{{ amount.month }}</td>
-				<td>{{ amount.category }}</td>
-				<td style="text-align: right;">{{ amount.amount }}</td>
+        <td>{{ amount.month }}</td>
+        <!-- 一致したカテゴリから金額を表示 -->
+        {% for category in categories %}
+          {% for content in amount.contents %}
+            {% if category.name == content.con_name %}
+              <td style="text-align: right;">{{ content.amount }}</td>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
 			</tr>
 			{% endfor %}
 		</tbody>
 	</table>
 </div>
-<h3>月・支払い方法毎</h3>
+<h3>月・支払い毎</h3>
 <div class="table-responsive">
 	<table class="table table-striped table-bordered">
 		<thead>
 			<tr>
-				<th>月</th>
-				<th>支払い方法</th>
-				<th>金額</th>
+        <th>月</th>
+        {% for payment in payments %}
+				<th>{{ payment.name }}</th>
+        {% endfor %}
 			</tr>
 		</thead>
 		<tbody>
-			{% for amount in amounts_per_m_p %}
+      {% for amount in amounts_per_m_p %}
 			<tr>
-				<td>{{ amount.month }}</td>
-				<td>{{ amount.payment }}</td>
-				<td style="text-align: right;">{{ amount.amount }}</td>
+        <td>{{ amount.month }}</td>
+        <!-- 一致したカテゴリから金額を表示 -->
+        {% for payment in payments %}
+          {% for content in amount.contents %}
+            {% if payment.name == content.con_name %}
+              <td style="text-align: right;">{{ content.amount }}</td>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
 			</tr>
 			{% endfor %}
 		</tbody>
 	</table>
 </div>
-
 
 <!-- <h3>日毎</h3>
 <div class="table-responsive">
