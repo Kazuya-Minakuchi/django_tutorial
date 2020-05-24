@@ -8,6 +8,7 @@ urlpatterns = [
     path('record/<int:pk>/edit/', views.record_edit, name='record_edit'),
     path('record/<pk>/remove/', views.record_remove, name='record_remove'),
     path('record/<pk>/copy/', views.record_copy, name='record_copy'),
+    path('record/aggregate/', views.record_aggregate, name='record_aggregate'),
     path('category/list/', views.category_list, name='category_list'),
     path('category/new/', views.category_new, name='category_new'),
     path('category/<int:pk>/edit/', views.category_edit, name='category_edit'),

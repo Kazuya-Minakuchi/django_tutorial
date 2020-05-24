@@ -2,6 +2,8 @@ import csv
 import datetime
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db import models
+from django.db.models import Max, Sum
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -9,6 +11,7 @@ from django.utils import timezone
 from django.views import generic
 from .models import Record, Category, Payment
 from .forms import RecordForm, CategoryForm, PaymentForm, CSVUploadForm
+
 
 # レコード一覧
 def record_list(request):
@@ -167,6 +170,59 @@ def payment_remove(request, pk):
     payment = get_object_or_404(Payment, pk=pk)
     payment.delete()
     return redirect('expenses:payment_list')
+
+# リストの重複を消してソートする関数
+def sorted_unique_list(lst):
+    return sorted(list(set(lst)))
+
+# レコード集計用の辞書作成関数
+def create_dict(months, key, contents):
+    ret_dict = [{'month': month, key: content, 'amount': 0}
+        for month in months
+          for content in contents]
+    return ret_dict
+
+# レコード集計用、フィルタ&合計関数
+def filter_sum(dict, amounts, key):
+    amount_filtered = filter(
+        lambda x: (x['expense_date'].strftime('%Y-%m') == dict['month']) and (x[key] == dict[key].pk),
+        amounts)
+    return sum(map(lambda x: x['total_price'], amount_filtered))
+
+# 金額集計用関数
+def amount_aggregate(months, amounts, key, contents):
+    return_dicts = create_dict(months, key, contents)
+    for return_dict in return_dicts:
+        return_dict['amount'] = filter_sum(return_dict, amounts, key)
+    return return_dicts
+
+# レコード集計画面
+def record_aggregate(request):
+    records = Record.objects.all()
+    categories = Category.objects.all()
+    payments = Payment.objects.all()
+    
+    # 「日、カテゴリ、支払い方法」で金額をまとめる
+    amounts = (
+        records
+        .values('expense_date', 'category', 'payment')
+        .annotate(total_price=Sum('amount'))
+    )
+    
+    # 集計用の月一覧
+    months = sorted_unique_list([amount['expense_date'].strftime('%Y-%m') for amount in amounts])
+    # 月・カテゴリで金額を集計
+    amounts_per_m_c = amount_aggregate(months, amounts, 'category', categories)
+    # # 月・支払い方法で金額を集計
+    amounts_per_m_p = amount_aggregate(months, amounts, 'payment', payments)
+
+    context = {
+        'amounts': amounts,
+        'amounts_per_m_c': amounts_per_m_c,
+        'amounts_per_m_p': amounts_per_m_p,
+    }
+    return render(request, 'expenses/record_aggregate.html', context)
+    # return context
 
 # カテゴリCSVインポート
 class RecordImport(generic.FormView):
