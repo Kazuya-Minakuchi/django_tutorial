@@ -43,24 +43,14 @@
   </li>
   {% endif %}
 
-  <!-- 左端が1以外だったら"..."表示 -->
-  {% if start_page > 1 %}
-    <li class="page-item"><p class="page-link" href="#!">...</p></li>
-  {% endif %}
-
   <!-- 前後4ページはリンク表示 -->
 	{% for num in page_obj.paginator.page_range %}
 		{% if page_obj.number == num %}
 			<li class="page-item active"><a class="page-link" href="#!">{{ num }}</a></li>
-		{% elif num >= start_page and num <= end_page %}
+		{% elif num <= page_obj.number|add:5 and num >= page_obj.number|add:-5 %}
 			<li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
 		{% endif %}
 	{% endfor %}
-
-  <!-- 右端が最終ページ以外だったら"..."表示 -->
-  {% if end_page < page_obj.paginator.num_pages %}
-    <li class="page-item"><p class="page-link" href="#!">...</p></li>
-  {% endif %}
 
   <!-- 最終へーじへ移動 -->
 	{% if page_obj.has_next %}

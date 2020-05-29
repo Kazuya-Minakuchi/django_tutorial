@@ -3,7 +3,7 @@ from . import views
 
 app_name = 'expenses'
 urlpatterns = [
-    path('', views.record_list, name='record_list'),
+    path('', views.RecordList.as_view(), name='record_list'),
     path('record/new/', views.record_new, name='record_new'),
     path('record/<int:pk>/edit/', views.record_edit, name='record_edit'),
     path('record/<pk>/remove/', views.record_remove, name='record_remove'),

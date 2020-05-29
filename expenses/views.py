@@ -9,21 +9,19 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import generic
+from django.views.generic import ListView
 from .models import Record, Category, Payment
 from .forms import RecordForm, CategoryForm, PaymentForm, CSVUploadForm
 
 
 # レコード一覧
-def record_list(request):
-    records = Record.objects.order_by('-expense_date', '-created_date')
-    page_obj = paginate_queryset(request, records, 10)
-    context = {
-        'records': page_obj.object_list,
-        'page_obj': page_obj,
-        'start_page': page_obj.number - 4,
-        'end_page': page_obj.number + 4,
-    }
-    return render(request, 'expenses/record_list.html', context)
+class RecordList(ListView):
+    template_name = "expenses/record_list.html"
+    context_object_name = 'records'
+    queryset = Record.objects.order_by('-expense_date', '-created_date')
+    model = Record
+    paginate_by = 10
+    
 
 def paginate_queryset(request, queryset, count):
     paginator = Paginator(queryset, count)
