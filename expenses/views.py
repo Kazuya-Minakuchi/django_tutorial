@@ -3,7 +3,7 @@ import datetime
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import models
-from django.db.models import Max, Sum
+from django.db.models import Max, Sum, Q
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -13,26 +13,18 @@ from django.views.generic import ListView
 from .models import Record, Category, Payment
 from .forms import RecordForm, CategoryForm, PaymentForm, CSVUploadForm
 
-
 # レコード一覧
 class RecordList(ListView):
     template_name = "expenses/record_list.html"
     context_object_name = 'records'
-    queryset = Record.objects.order_by('-expense_date', '-created_date')
-    model = Record
     paginate_by = 10
-    
-
-def paginate_queryset(request, queryset, count):
-    paginator = Paginator(queryset, count)
-    page = request.GET.get('page')
-    try:
-        page_obj = paginator.page(page)
-    except PageNotAnInteger:
-        page_obj = paginator.page(1)
-    except EmptyPage:
-        page_obj = paginator.page(paginator.num_pages)
-    return page_obj
+    def get_queryset(self):
+        q_word = self.request.GET.get('query')
+        if q_word:
+            object_list = Record.objects.filter(Q(note__icontains=q_word))
+        else:
+            object_list = Record.objects.all()
+        return object_list.order_by('-expense_date', '-created_date')
 
 # カテゴリ一覧
 @login_required

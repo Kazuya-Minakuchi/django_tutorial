@@ -2,6 +2,11 @@
 
 {% block content %}
 <h2>Record List</h2>
+<form action="" method="get">
+	用途検索
+	<input name="query" value="{{ request.GET.query }}" type="text">
+	<button type="submit">検索</button>
+</form>
 <div class="table-responsive">
 	<table class="table table-striped table-bordered">
 		<thead>
