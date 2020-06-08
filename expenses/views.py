@@ -1,6 +1,8 @@
 import csv
 import datetime
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView
 from django.db import models
 from django.db.models import Max, Sum, Q
 from django.http import HttpResponse
@@ -10,7 +12,16 @@ from django.utils import timezone
 from django.views import generic
 from django.views.generic import ListView
 from .models import Record, Category, Payment
-from .forms import RecordForm, CategoryForm, PaymentForm, CSVUploadForm
+from .forms import LoginForm, RecordForm, CategoryForm, PaymentForm, CSVUploadForm
+
+class Login(LoginView):
+    """ログインページ"""
+    form_class = LoginForm
+    template_name = 'expenses/login.html'
+
+class Logout(LogoutView):
+    """ログアウトページ"""
+    template_name = "expenses/record_list.html"
 
 # レコード一覧
 class RecordList(ListView):

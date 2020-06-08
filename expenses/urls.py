@@ -19,4 +19,7 @@ urlpatterns = [
     path('payment/<pk>/remove/', views.payment_remove, name='payment_remove'),
     path('import/', views.RecordImport.as_view(), name='import'),
     path('export/', views.record_export, name='export'),
+    path('', views.RecordList.as_view(), name='top'),
+    path('login/', views.Login.as_view(), name='login'),
+    path('logout/', views.Logout.as_view(), name='logout'),
 ]

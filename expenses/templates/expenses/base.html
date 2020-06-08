@@ -9,17 +9,17 @@
   <body>
     <header class="bg-dark text-white clearfix">
       {% if user.is_authenticated %}
-        <h2 class="float-right">Hello {{ user.username }} <small>(<a href="{% url 'logout' %}">Log out</a>)</small></h2>
+        <h2 class="float-right">Hello {{ user.username }} <small>(<a href="{% url 'expenses:logout' %}">Log out</a>)</small></h2>
       {% else %}
-        <h2 class="float-right" href="{% url 'login' %}">Log in</h2>
+        <h2 class="float-right"><a href="{% url 'expenses:login' %}">Log in</a></h2>
       {% endif %}
       <h1 class="text-white float-left"><a href="{% url 'expenses:record_list' %}">Expenses</a></h1>
     </header>
     <div class="container-fluid">
+      {% if user.is_authenticated %}
       <div class="row">
         <div class="col-md-1 d-none d-md-block" style="color: white;">left</div>
         <div class="col-md-2 border">
-          {% if user.is_authenticated %}
           <h3>レコード</h3>
           <p>
             <a href="{% url 'expenses:record_new' %}">
@@ -28,10 +28,8 @@
             <a href="{% url 'expenses:record_list' %}">一覧</a>
             <a href="{% url 'expenses:record_aggregate' %}">集計</a>
           </p>
-          {% endif %}
         </div>
         <div class="col-md-2 border">
-          {% if user.is_authenticated %}
           <h3>カテゴリ</h3>
           <p>
             <a href="{% url 'expenses:category_new' %}">
@@ -39,10 +37,8 @@
             </a>
             <a href="{% url 'expenses:category_list' %}">一覧</a>
           </p>
-          {% endif %}
         </div>
         <div class="col-md-2 border">
-          {% if user.is_authenticated %}
           <h3>支払い方法</h3>
           <p>
             <a href="{% url 'expenses:payment_new' %}">
@@ -50,10 +46,8 @@
             </a>
             <a href="{% url 'expenses:payment_list' %}">一覧</a>
           </p>
-          {% endif %}
         </div>
         <div class="col-md-2 border">
-          {% if user.is_authenticated %}
           <h3>CSV</h3>
           <p>
             <a href="{% url 'expenses:import' %}">
@@ -63,10 +57,10 @@
               <button type="button" class="btn btn-success btn-sm">Export</button>
             </a>
           </p>
-          {% endif %}
         </div>
         <div class="col-md-3 d-none d-sm-block d-md-block" style="color: white;">right</div>
       </div>
+      {% endif %}
       <div class="row">
         <div class="col-md-1 d-none d-sm-block d-md-block" style="color: white;">left</div>
         <div class="col-md-10">
