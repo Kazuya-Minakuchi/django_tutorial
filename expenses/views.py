@@ -1,7 +1,6 @@
 import csv
 import datetime
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import models
 from django.db.models import Max, Sum, Q
 from django.http import HttpResponse
