@@ -90,7 +90,6 @@ def record_copy(request, pk):
     else:
         copied_record = get_object_or_404(Record, pk=pk)
         copied_data = {
-            'expense_date': copied_record.expense_date,
             'amount': copied_record.amount,
             'category': copied_record.category,
             'payment': copied_record.payment,
