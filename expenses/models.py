@@ -6,7 +6,7 @@ from django.utils import timezone
 
 class Record(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
-    expense_date = models.DateField(default=timezone.now().date())
+    expense_date = models.DateField(blank=True, null=True)
     amount = models.IntegerField()
     category = models.ForeignKey('expenses.Category', on_delete=models.CASCADE, related_name='records')
     payment = models.ForeignKey('expenses.Payment', on_delete=models.CASCADE, related_name='records')
