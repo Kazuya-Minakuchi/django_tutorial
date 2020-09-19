@@ -59,7 +59,10 @@ def record_new(request):
             record.save()
             return redirect('expenses:record_list')
     else:
-        form = RecordForm()
+        default_value = {
+            'expense_date': timezone.datetime.today(),
+        }
+        form = RecordForm(None, initial=default_value)
     return render(request, 'expenses/record_edit.html', {'form': form})
 
 # レコード編集
@@ -90,6 +93,7 @@ def record_copy(request, pk):
     else:
         copied_record = get_object_or_404(Record, pk=pk)
         copied_data = {
+            'expense_date': timezone.datetime.today(),
             'amount': copied_record.amount,
             'category': copied_record.category,
             'payment': copied_record.payment,
