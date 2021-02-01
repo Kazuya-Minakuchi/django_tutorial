@@ -176,7 +176,7 @@ def payment_remove(request, pk):
 
 # リストの重複を消してソートする関数
 def sorted_unique_list(lst):
-    return sorted(list(set(lst)))
+    return sorted(list(set(lst)), reverse=True)
 
 # レコード集計用、フィルタ&合計関数
 def filter_sum(amounts, month, key=None, key_pk=None):
